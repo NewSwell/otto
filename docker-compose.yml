@@ -1,0 +1,61 @@
+version: '1'
+
+services:
+  directus-cms:
+    container_name: directus-cms
+    build:
+      context: ./directus
+      dockerfile: ./Dockerfile
+    restart: always
+    volumes:
+      - ./directus/uploads:/directus/uploads
+      - ./directus/extensions:/directus/extensions
+    environment:
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      DB_CLIENT: 'mysql'
+      DB_HOST: 'directus-database'
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASS}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASS}
+      CORS_ENABLED: true
+      CORS_ORIGIN: '*'
+    depends_on:
+      - directus-database
+    ports:
+      - ${PORT_DIRECTUS}:8055
+
+  directus-database:
+    container_name: directus-database
+    image: mysql:8.0
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password --sort_buffer_size=250M
+    environment:
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASS}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASS}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      USER: "${LOCAL_ACCOUNT_ID}"
+    volumes:
+      - ./sql-data:/var/lib/mysql
+
+  directus-nextjs:
+    container_name: directus-nextjs
+    build:
+      context: ./nextjs
+      dockerfile: ./Dockerfile
+    restart: always
+    environment:
+      AUTH_SECRET: "${NEXT_AUTH_SECRET}"
+      YOUTUBE_API_KEY: "${YOUTUBE_API_KEY}"
+      LASTFM_API_KEY: "${LASTFM_API_KEY}"
+    volumes:
+      - ./nextjs/app:/usr/src/app
+    ports:
+      - ${PORT_NEXTJS_WEB}:3000
+    depends_on:
+      - directus-database
+      - directus-cms
