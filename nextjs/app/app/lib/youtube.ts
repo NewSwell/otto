@@ -4,7 +4,7 @@ const baseQuery = {
     type: 'video',
     format: '5',
     topicId: '/m/04rlf',
-    key: process.env.YOUTUBE_API_KEY,
+    key: process.env.YOUTUBE_API_KEY ?? '',
 };
 
 async function api(query: object) {

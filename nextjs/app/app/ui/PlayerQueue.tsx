@@ -13,6 +13,7 @@ export default function PlayerQueue({
   const playlist = usePlaylist()
 
   // render data
+  const currentTrack = playlist?.[currentIndex];
   const nextTrack = playlist?.[currentIndex + 1];
   if(!nextTrack?.track) return 
 
@@ -20,6 +21,11 @@ export default function PlayerQueue({
 
   return (
     <div className="flex items-end w-[250px] p-3 bg-gray-500/50 text-white absolute z-0 bottom-10 right-10">
+      <div className="flex-grow">
+        <div className="">NOW PLAYING</div>
+        <div className="font-bold">{currentTrack.artist}</div>
+        <div className="">{currentTrack.track}</div>
+      </div>
       <div className="flex-grow">
         <div className="">NEXT UP</div>
         <div className="font-bold">{nextTrack.artist}</div>
