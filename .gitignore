@@ -3,3 +3,4 @@ directus/extensions
 # nextjs/app
 sql-data
 .env
+.DS_Store
