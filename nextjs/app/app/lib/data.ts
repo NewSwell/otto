@@ -46,9 +46,9 @@ export async function addTrack( artist: string, name: string, youtubeId:string )
 
   try{
     const data = await client.mutate(mutation)
-    console.log('mutation.data', data)
   } catch(error) {
-    throw new Error("Unable to add track")
+    console.log('error', error)
+    throw new Error(`Unable to add track ${artist} ${name} ${youtubeId}`)
   }
 }
 

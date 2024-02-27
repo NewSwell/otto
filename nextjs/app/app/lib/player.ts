@@ -12,14 +12,16 @@ export async function getVideo(artist: string) {
 
   try{
     video = await getTrack(track.artist.name, track.name)
-    if (video.length) {
+  console.log('video from player.getTrack', video)  
+    if (video?.track?.[0]?.youtubeId) {
+      console.log('got video from cache/data', video)
+      const track = video.track[0];
       return {
-        artist: track.artist.name,
+        artist: track.artist,
         track: track.name,
-        video: video[0],
-      }
+        video: track.youtubeId,
+      };
     }
-console.log('got video from data', video)
   } catch (error) {
     console.log("Unable to get track from cache")
   }

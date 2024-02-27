@@ -2,9 +2,7 @@ import { HttpLink, ApolloClient, InMemoryCache } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = new HttpLink({
-  // uri: "http://172.23.0.3:8055/graphql",
-  uri: "http://directus-cms:8055/graphql",
-  
+  uri: process.env.GRAPHQL_URL,
   fetchOptions: { cache: "no-store" },
 });
 
@@ -12,7 +10,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: `Bearer cdMofZNuGUC8p0p0czlbVUJnZdCE40N6`,
+      authorization: `Bearer ${process.env.GRAPHQL_KEY}`,
     }
   }
 });
