@@ -1,4 +1,5 @@
 import { fetchTopArtists } from '../lib/lastfm';
+import { toUrlCase } from '../lib/util';
 
 export default async function ArtistList() {
 
@@ -7,7 +8,9 @@ export default async function ArtistList() {
   return (
     <div>
       {response?.artists?.artist?.map(artist => (
-          <div key={artist.id}>{artist.name}</div>
+          <div>
+            <a key={artist.mbid} href={`artist/${toUrlCase(artist.name)}`}>{artist.name}</a>
+          </div>
       ))}
     </div>
   );

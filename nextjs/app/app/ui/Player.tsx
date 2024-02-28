@@ -34,7 +34,7 @@ export default function Player({ artist } : {artist: string}) {
       const data = await response.json()
       return data
     } catch {
-      throw "Unable to fetch playlist"
+      throw "Unable to fetch track"
     }
   }
 
@@ -92,7 +92,7 @@ export default function Player({ artist } : {artist: string}) {
       height='100%'
       onStart={queueNext}
       onEnded={playNext}
-      controls={true}
+      controls={false}
     />
     <PlayerQueue 
       currentIndex={currentIndex}
