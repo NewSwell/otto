@@ -3,7 +3,7 @@
 import { createContext, useContext, useReducer } from 'react'
 
 const PlaylistContext = createContext([])
-const PlaylistDispatchContext = createContext(null)
+const PlaylistDispatchContext = createContext({})
 
 export function PlaylistProvider({ children }: React.PropsWithChildren) {
   const [playlist, dispatch] = useReducer(

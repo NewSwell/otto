@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import ReactPlayer from 'react-player'
 import PlayerQueue from './PlayerQueue'
 import { usePlaylistDispatch, usePlaylist } from '../lib/PlaylistContext'
+import { useSession } from 'next-auth/react'
  
 
 export default function Player({ artist } : {artist: string}) {
@@ -13,9 +14,14 @@ export default function Player({ artist } : {artist: string}) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const dispatch = usePlaylistDispatch()
   const playlist = usePlaylist()
+  const { data: session, status } = useSession()
+  let preferences = {}
+  if (status === "authenticated"){
+    const {user} = session
+    preferences = user.preferences
+  } 
 
   async function fetchPlaylist(){
-    console.log('fetchPlaylist')
     try {
       const query = new URLSearchParams({artist})
       const response = await fetch(`/playlist/api?${query}`)
@@ -27,7 +33,6 @@ export default function Player({ artist } : {artist: string}) {
   }
 
   async function fetchTrack(artist){
-    console.log('fetchTrack')
     try {
       const query = new URLSearchParams({artist})
       const response = await fetch(`/queue/api?${query}`)
@@ -44,8 +49,6 @@ export default function Player({ artist } : {artist: string}) {
   }
 
   async function queueNext() {
-    console.log('queueNext', playlist)
-
     const nextIndex = currentIndex + 1
     const next = playlist?.[nextIndex]
     if(next && !next.video){
@@ -71,19 +74,15 @@ export default function Player({ artist } : {artist: string}) {
           track: {artist},
         })
       ))
-     
-      console.log('playlist after dispatch',  playlist);
     }
 
     updatePlaylist()
   }, [artist])
 
   if(!playlist.length) return
-  console.log('playlist', playlist)
-  console.log('currentIndex', currentIndex)
-  const url = `https://www.youtube.com/watch?v=${playlist[currentIndex].video}`
 
-  console.log('url', url);
+  const url = `https://www.youtube.com/watch?v=${playlist[currentIndex].video}`
+console.log('preferences in player', preferences)
   return  <>
     <ReactPlayer 
       url={url} 
@@ -92,7 +91,7 @@ export default function Player({ artist } : {artist: string}) {
       height='100%'
       onStart={queueNext}
       onEnded={playNext}
-      controls={false}
+      controls={preferences?.showControls}
     />
     <PlayerQueue 
       currentIndex={currentIndex}

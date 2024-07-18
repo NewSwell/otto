@@ -30,7 +30,7 @@ export async function addTrack( artist: string, name: string, youtubeId:string )
   const mutation = {
     mutation: gql`
       mutation AddTrack($artist: String!, $name: String!, $youtubeId: String!) {
-        create_track_item(data: { artist: $artist, name: $name , youtubeId: $youtubeId }) {
+        create_track_item(data: { artist: $artist, name: $name, youtubeId: $youtubeId }) {
           artist
           name
           youtubeId

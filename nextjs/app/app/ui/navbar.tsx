@@ -1,22 +1,22 @@
-'use client';
+'use client'
 
-import { Fragment } from 'react';
-import { usePathname } from 'next/navigation';
-import { Menu, Transition } from '@headlessui/react';
-import { signIn, signOut } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import Search from './search';
-
-const navigation: any[] = [];
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { UserIcon } from "@heroicons/react/24/solid"
+import Link from 'next/link'
+import Search from './search'
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(' ')
 }
 
 
-export default function Navbar({ user }: { user: any }) {
-  const pathname = usePathname();
+export default function Navbar({setSidebarIsOpen}) {
+
+  const { data: session } = useSession();
+  const user = session?.user
 
   return (
     <>
@@ -34,23 +34,28 @@ export default function Navbar({ user }: { user: any }) {
         </Link>
       </div>
       <div className="grid p-2.5 w-full">
-        <Search className="w-3/4" />
+        <Search />
       </div>
       <div className="flex p-2.5">
       <Menu as="div" className="relative ml-3">
         <div>
-          <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+          <Menu.Button 
+            className="flex h-8 w-8 rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
             <span className="sr-only">Open user menu</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-              <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
-            </svg>
-            {/* <Image
-              className="h-8 w-8 rounded-full"
-              src={user?.image || 'https://avatar.vercel.sh/leerob'}
+            {!user?.image && 
+            <UserIcon 
+              className="h-8 w-8 rounded-full text-black"
               height={32}
               width={32}
-              alt={`${user?.name || 'placeholder'} avatar`}
-            /> */}
+            />} 
+            {user?.image && 
+            <Image
+              className="h-8 w-8 rounded-full"
+              src={user.image}
+              height={32}
+              width={32}
+              alt={user?.name || 'Account'}
+            />}
           </Menu.Button>
         </div>
         <Transition
@@ -64,6 +69,7 @@ export default function Navbar({ user }: { user: any }) {
         >
           <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             {user ? (
+              <>
               <Menu.Item>
                 {({ active }) => (
                   <button
@@ -77,6 +83,20 @@ export default function Navbar({ user }: { user: any }) {
                   </button>
                 )}
               </Menu.Item>
+              <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={classNames(
+                    active ? 'bg-gray-100' : '',
+                    'flex w-full px-4 py-2 text-sm text-gray-700'
+                  )}
+                  onClick={() => setSidebarIsOpen(true)}
+                >
+                  Preferences
+                </button>
+              )}
+            </Menu.Item>
+            </>
             ) : (
               <Menu.Item>
                 {({ active }) => (
@@ -98,5 +118,5 @@ export default function Navbar({ user }: { user: any }) {
       </div>
     </div>
     </>
-  );
+  )
 }

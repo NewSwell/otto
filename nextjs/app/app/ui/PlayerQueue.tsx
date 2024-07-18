@@ -19,7 +19,7 @@ export default function PlayerQueue({
 
   return (
     <div className="group w-60 h-24 p-3 rounded overflow-hidden bg-gray-500/50 text-white absolute z-0 bottom-10 right-10">
-      <div className="group-hover:-translate-y-24 transition-transform text-sm">
+      <div className="group-hover:-translate-y-24 transition-transform text-sm drop-shadow">
         <div className="h-24">
           <div className="text-xs font-thin mb-2">NOW PLAYING</div>
           <div className="font-medium truncate">{currentTrack.artist}</div>

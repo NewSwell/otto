@@ -54,6 +54,8 @@ services:
       LASTFM_API_KEY: "${LASTFM_API_KEY}"
       GRAPHQL_KEY: "${GRAPHQL_KEY}"
       GRAPHQL_URL: "${GRAPHQL_URL}"
+      OAUTH_CLIENT_KEY: "${OAUTH_CLIENT_KEY}"
+      OAUTH_CLIENT_SECRET: "${OAUTH_CLIENT_SECRET}"
     volumes:
       - ./nextjs/app:/usr/src/app
     ports:
