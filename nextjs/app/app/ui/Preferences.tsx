@@ -8,8 +8,7 @@ import { updateUserPreferences } from '../lib/user';
 export default function Preferences() {
 
     const { data: session, status, update } = useSession()
-console.log('session', session);
-    if (session === undefined){
+    if (session === undefined || session === null){
         return;
     }
     const { user } = session
@@ -44,9 +43,8 @@ console.log('session', session);
                 id="showControls"
                 name="showControls"
                 defaultChecked={preferences.showControls}
-                // checked={preferences.showControls}
-                onChange={async () => {
-                    await updatePreferences('showControls', !preferences.showControls)
+                onChange={() => {
+                    updatePreferences('showControls', !preferences.showControls)
                 }}
             />
             Show Controls

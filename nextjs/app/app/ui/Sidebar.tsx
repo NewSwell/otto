@@ -6,7 +6,7 @@ export default function Sidebar({isOpen, setIsOpen}){
 
     return <div className={classNames({
 		"absolute right-0 top-[60px] bottom-0 bg-gray-50 transition-all overflow-hidden z-10": true,
-		'w-64': isOpen,
+		'w-64 p-2.5': isOpen,
 		'w-0': !isOpen,
 	})}
     >

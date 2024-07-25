@@ -1,6 +1,7 @@
 import { fetchArtistTopTracks } from "./lastfm"
 import { fetchVideoByTrack } from "./youtube"
 import { getTrack, addTrack } from './data'
+import { getPlaylist } from "./openai"
 
 export async function getVideo(artist: string) {
   const tracks = await fetchArtistTopTracks(artist)
@@ -8,6 +9,9 @@ export async function getVideo(artist: string) {
   const track = tracklist[Math.floor(Math.random()*tracklist.length)]
 
   let video
+
+  const openaiPlaylist = await getPlaylist(artist)
+  console.log('openaiPlaylist', openaiPlaylist)
 
   try{
     video = await getTrack(track.artist.name, track.name)
