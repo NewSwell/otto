@@ -34,12 +34,9 @@ export const {
 
       const { provider, providerAccountId } = token
 
-      console.log('sesh token', token);
-
       if(token.session) {
         return token.session;
       }
-
 
       if (session.user) {
         const { id, preferences } = await getUser(`${provider}:${providerAccountId}`)

@@ -1,7 +1,6 @@
 import { fetchArtistTopTracks } from "./lastfm"
 import { fetchVideoByTrack } from "./youtube"
 import { getTrack, addTrack } from './data'
-import { getPlaylist } from "./openai"
 
 export async function getVideo(artist: string) {
   const tracks = await fetchArtistTopTracks(artist)
@@ -9,9 +8,6 @@ export async function getVideo(artist: string) {
   const track = tracklist[Math.floor(Math.random()*tracklist.length)]
 
   let video
-
-  const openaiPlaylist = await getPlaylist(artist)
-  console.log('openaiPlaylist', openaiPlaylist)
 
   try{
     video = await getTrack(track.artist.name, track.name)
@@ -30,7 +26,7 @@ export async function getVideo(artist: string) {
 
   try {
     video = await fetchVideoByTrack(`${track.artist.name} - ${track.name} (Official Video)`)
-    console.log('got video from api', video);
+    console.log('got video from api', video)
     addTrack(track.artist.name, track.name, video)
   } catch {
     console.log("Unable to get track from api")

@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/react'
 
 export default function Player({ artist } : {artist: string}) {
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0)
   const dispatch = usePlaylistDispatch()
   const playlist = usePlaylist()
   const { data: session, status } = useSession()
@@ -32,7 +32,7 @@ export default function Player({ artist } : {artist: string}) {
     }
   }
 
-  async function fetchTrack(artist){
+  async function fetchTrack(artist: string){
     try {
       const query = new URLSearchParams({artist})
       const response = await fetch(`/queue/api?${query}`)
@@ -64,32 +64,44 @@ export default function Player({ artist } : {artist: string}) {
   useEffect(() => {
     const updatePlaylist = async () => {
       const data = await fetchPlaylist()
-      dispatch({
-        type: 'added',
-        track: data.video,
-      })
-      data.similarArtists.forEach(artist => (
+      // dispatch({
+      //   type: 'added',
+      //   track: data.video,
+      // })
+      // data.similarArtists.forEach(artist => (
+      //   dispatch({
+      //     type: 'added',
+      //     track: {artist},
+      //   })
+      // ))
+      console.log('data', data);
+      data.tracklist.forEach(item => {
+        const video = item.url.substring(item.url.length - 11)
+        const {artist, track} = item
         dispatch({
           type: 'added',
-          track: {artist},
+          track: {artist, track, video},
         })
-      ))
+      })
+
     }
 
     updatePlaylist()
   }, [artist])
 
   if(!playlist.length) return
-
+  console.log('playlist', playlist)
   const url = `https://www.youtube.com/watch?v=${playlist[currentIndex].video}`
-console.log('preferences in player', preferences)
+
+  console.log('url', url)
+
   return  <>
     <ReactPlayer 
       url={url} 
       playing={true} 
       width='100%'
       height='100%'
-      onStart={queueNext}
+      // onStart={queueNext}
       onEnded={playNext}
       controls={preferences?.showControls}
     />
